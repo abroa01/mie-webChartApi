@@ -1,3 +1,5 @@
-export const BASE_URL = 'https://anshulmie.webchartnow.com/webchart.cgi';
-export const USERNAME = 'abroa01';
-export const PASSWORD = '$K@ter0707';
+const BASE_URL = 'webchart.cgi/json/GET/db/abbreviations';
+
+export default {
+    BASE_URL
+};
