@@ -1,13 +1,15 @@
-const BaseApi = require('../core/baseApi');
+import BaseApi from '../core/baseApi.js';
+import BASE_URL  from '../config/apiConfig.js';
 
-class AbbreviationsApi extends BaseApi{
+const  abbreviationsApi = new BaseApi(BASE_URL);
+class AbbreviationsApi extends BaseApi {
     constructor(baseUrl) {
         super(baseUrl);
     }
 
-    getAbbreviations(options, callback){
-        this.request('GET', 'db/abbrevations', options, callback);
+    getAbbreviations(options, callback) {
+        this.request('GET', 'db/abbreviations', options, callback);
     }
 }
 
-module.exports = AbbreviationsApi;
+export default AbbreviationsApi;

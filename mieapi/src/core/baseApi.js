@@ -1,26 +1,26 @@
-const axios = require('axios');
-const { response } = require('express');
+import axios from 'axios';
 
-class BaseApi{
-    constructor(basUrl){
-        this.basUrl = basUrl;
-        this.debug = false
+class BaseApi {
+    constructor(baseUrl) {
+        this.baseUrl = baseUrl;
+        this.debug = false;
     }
-    
-    enableDebug(logFunction){
+
+    enableDebug(logFunction) {
         this.debug = true;
         this.log = logFunction;
     }
 
-    request(method, endpoint, options, callback){
+    request(method, endpoint, options, callback) {
         let url = `${this.baseUrl}/${endpoint}`;
-        if (typeof options == 'string') {
-            url += `?${options}`;            
-        } else if(typeof options == 'object') {
+        console.log('Constructed URL : ', url)
+        if (typeof options === 'string') {
+            url += `?${options}`;
+        } else if (typeof options === 'object') {
             const queryParams = new URLSearchParams(options).toString();
-            url += `?${queryParams}`;            
+            url += `?${queryParams}`;
         }
-        if(this.debug){
+        if (this.debug) {
             this.log(`URL: ${url}`);
         }
 
@@ -35,4 +35,4 @@ class BaseApi{
     }
 }
 
-module.exports = BaseApi;
+export default BaseApi;
