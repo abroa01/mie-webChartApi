@@ -1,14 +1,24 @@
 import BaseApi from '../core/baseApi.js';
-import BASE_URL  from '../config/apiConfig.js';
 
-const  abbreviationsApi = new BaseApi(BASE_URL);
 class AbbreviationsApi extends BaseApi {
-    constructor(baseUrl) {
-        super(baseUrl);
+    constructor() {
+        super();
     }
 
-    getAbbreviations(options, callback) {
-        this.request('GET', 'db/abbreviations', options, callback);
+    async getAbbreviations(options, callback) {
+        try {
+            if (!this.cookie) {
+                await this.initializeSession();
+            }
+
+            const endpoint = 'GET/db/abbreviations';
+            this.request('GET', endpoint, options, callback);
+        } catch (error) {
+            console.error('Error fetching abbreviations:', error);
+            if (callback && typeof callback === 'function') {
+                callback(error);
+            }
+        }
     }
 }
 
