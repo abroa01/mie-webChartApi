@@ -39,7 +39,7 @@ class BaseApi {
         this.log = logFunction;
     }
 
-    async request(method, endpoint, options, callback) {
+    async getRequest(method, endpoint, options, callback) {
         if (!this.cookie) {
             console.error('No session cookie available');
             callback(new Error('No session cookie available'));
@@ -57,6 +57,7 @@ class BaseApi {
             const response = await fetch(url, {
                 method,
                 headers: {
+                    'Content-Type':'application/json',
                     'cookie': `wc_miehr_anshulmie_session_id=${this.cookie}`
                 }
             });
@@ -71,6 +72,42 @@ class BaseApi {
             callback(error);
         }
     }
+
+    async putRequest(method ,json, endpoint, callback) {
+        if(!this.cookie){
+            console.error('No Session Cookie Available');
+            callback(new Error('No Session Cookie Available'));
+            return;
+        }
+        const encodedEndpoint = base64.encode(endpoint);
+        const url = `${this.baseUrl}/${encodedEndpoint}`;
+        const jsonBody = Array.isArray(json) ? json : [json];
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type':'application/json',
+                    'cookie': `wc_miehr_anshulmie_session_id=${this.cookie}`  
+                },
+                body: JSON.stringify(jsonBody)
+            }).then((data) => data.json());
+            if (this.debug) {
+                this.log(`URL: ${url}`);
+            }
+            if (!response.status == 200) {
+                const responseData = await response.json();
+                callback(null, responseData);
+                throw new Error(`HTTP error! status: ${response.status} | ${response.msg} | ${response.errors}`);
+            }
+        }catch(error){
+            callback(error);
+        }
+
+
+    }
+
+
 }
 
 export default BaseApi;
+

@@ -1,6 +1,7 @@
 import BaseApi from '../core/baseApi.js';
 
-class AbbreviationsApi extends BaseApi {
+
+export class AbbreviationsApi extends BaseApi {
     constructor() {
         super();
     }
@@ -12,7 +13,22 @@ class AbbreviationsApi extends BaseApi {
             }
 
             const endpoint = 'GET/db/abbreviations';
-            this.request('GET', endpoint, options, callback);
+            this.getRequest('GET', endpoint, options, callback);
+        } catch (error) {
+            console.error('Error fetching abbreviations:', error);
+            if (callback && typeof callback === 'function') {
+                callback(error);
+            }
+        }
+    }
+
+    async putAbbreviations(json, callback) {
+        try{
+            if(!this.cookie) {
+                await this.initializeSession();
+            }
+            const endpoint = 'PUT/db/abbreviations';
+            this.putRequest('PUT', json, endpoint, callback)
         } catch (error) {
             console.error('Error fetching abbreviations:', error);
             if (callback && typeof callback === 'function') {
@@ -21,5 +37,3 @@ class AbbreviationsApi extends BaseApi {
         }
     }
 }
-
-export default AbbreviationsApi;
