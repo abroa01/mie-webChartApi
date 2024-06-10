@@ -1,5 +1,5 @@
-import {AbbreviationsApi} from './abbreviationsApi.js';
+import {ApiService} from './ApiService.js';
 
 export default {
-    AbbreviationsApi
+    ApiService
 };

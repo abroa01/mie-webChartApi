@@ -45,8 +45,9 @@ class BaseApi {
             callback(new Error('No session cookie available'));
             return;
         }
-
-        const encodedEndpoint = base64.encode(endpoint);
+        const revisedEndpoint = `${method}/${endpoint}`
+        const encodedEndpoint = base64.encode(revisedEndpoint);
+        //console.log(encodedEndpoint);
         const url = `${this.baseUrl}/${encodedEndpoint}`;
 
         if (this.debug) {
@@ -79,7 +80,8 @@ class BaseApi {
             callback(new Error('No Session Cookie Available'));
             return;
         }
-        const encodedEndpoint = base64.encode(endpoint);
+        const revisedEndpoint = `${method}/${endpoint}`
+        const encodedEndpoint = base64.encode(revisedEndpoint);
         const url = `${this.baseUrl}/${encodedEndpoint}`;
         const jsonBody = Array.isArray(json) ? json : [json];
         try {
@@ -90,15 +92,18 @@ class BaseApi {
                     'cookie': `wc_miehr_anshulmie_session_id=${this.cookie}`  
                 },
                 body: JSON.stringify(jsonBody)
-            }).then((data) => data.json());
+            });//.then((data) => data.json());
+            const responseData = await response.json();
             if (this.debug) {
                 this.log(`URL: ${url}`);
             }
             if (!response.status == 200) {
-                const responseData = await response.json();
-                callback(null, responseData);
+                
+                //console.log(responseData);
+                
                 throw new Error(`HTTP error! status: ${response.status} | ${response.msg} | ${response.errors}`);
             }
+            callback(null, responseData);
         }catch(error){
             callback(error);
         }

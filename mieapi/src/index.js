@@ -1,10 +1,10 @@
 import { BASE_URL } from './config/apiConfig.js';
 import api from './apis/index.js';
 
-const { AbbreviationsApi } = api;
+const { ApiService } = api;
 
-const abbreviationsApi = new AbbreviationsApi(BASE_URL);
+const apiService = new ApiService(BASE_URL);
 
 export default {
-    abbreviationsApi
+    apiService
 };
