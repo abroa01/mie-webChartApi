@@ -45,8 +45,8 @@ class BaseApi {
             callback(new Error('No session cookie available'));
             return;
         }
-        const revisedEndpoint = `${method}/${endpoint}`
-        const encodedEndpoint = base64.encode(revisedEndpoint);
+        //const revisedEndpoint = `${method}/${endpoint}`
+        const encodedEndpoint = base64.encode(`${method}/${endpoint}/${options}`);
         //console.log(encodedEndpoint);
         const url = `${this.baseUrl}/${encodedEndpoint}`;
 
@@ -80,8 +80,8 @@ class BaseApi {
             callback(new Error('No Session Cookie Available'));
             return;
         }
-        const revisedEndpoint = `${method}/${endpoint}`
-        const encodedEndpoint = base64.encode(revisedEndpoint);
+        //const revisedEndpoint = `${method}/${endpoint}`
+        const encodedEndpoint = base64.encode(`${method}/${endpoint}`);
         const url = `${this.baseUrl}/${encodedEndpoint}`;
         const jsonBody = Array.isArray(json) ? json : [json];
         try {
