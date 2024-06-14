@@ -1,5 +1,6 @@
 import base64 from 'base-64';
 import { BASE_URL, USERNAME, PASSWORD } from '../config/apiConfig.js';
+import logger from '../logging/logger.js';
 
 class BaseApi {
     constructor() {
@@ -9,6 +10,7 @@ class BaseApi {
     }
 
     async initializeSession() {
+        logger.info('Initializing session');
         try {
             const loginData = {
                 login_user: USERNAME,
@@ -25,23 +27,19 @@ class BaseApi {
             const setCookieHeader = response.headers.get('set-cookie');
             if (setCookieHeader) {
                 this.cookie = setCookieHeader.split(';')[0].split('=')[1];
-                if (this.debug) {
-                    console.log('Session initialized with cookie:', this.cookie);
-                }
+                logger.info(`Session initialized successfully with cookie : ${this.cookie}`);
             }
         } catch (error) {
-            console.error('Session failed to initialize:', error);
+            logger.error('Session failed to initialize :', error);
+            //console.error('Session failed to initialize:', error);
         }
     }
 
-    enableDebug(logFunction) {
-        this.debug = true;
-        this.log = logFunction;
-    }
 
     async getRequest(method, endpoint, options, callback) {
         if (!this.cookie) {
-            console.error('No session cookie available');
+            //console.error('No session cookie available');
+            logger.error('No Session Cookie Available');
             callback(new Error('No session cookie available'));
             return;
         }
@@ -49,12 +47,10 @@ class BaseApi {
         const encodedEndpoint = base64.encode(`${method}/${endpoint}/${options}`);
         //console.log(encodedEndpoint);
         const url = `${this.baseUrl}/${encodedEndpoint}`;
-
-        if (this.debug) {
-            this.log(`URL: ${url}`);
-        }
+        logger.info(`Making GET request to: ${url}`);
 
         try {
+            const profiler = logger.startTimer();
             const response = await fetch(url, {
                 method,
                 headers: {
@@ -66,17 +62,20 @@ class BaseApi {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+            profiler.done({message: `Request to ${url} processed`})
             const responseData = await response.json();
+            
             callback(null, responseData);
         } catch (error) {
+            logger.error(`GET request failed: ${error.message}`);
             callback(error);
         }
     }
 
     async putRequest(method ,json, endpoint, callback) {
         if(!this.cookie){
-            console.error('No Session Cookie Available');
+            logger.error('No Session Cookie Available');
+            //console.error('No Session Cookie Available');
             callback(new Error('No Session Cookie Available'));
             return;
         }
@@ -84,7 +83,9 @@ class BaseApi {
         const encodedEndpoint = base64.encode(`${method}/${endpoint}`);
         const url = `${this.baseUrl}/${encodedEndpoint}`;
         const jsonBody = Array.isArray(json) ? json : [json];
+        logger.info(`Making PUT request to: ${url} with Json Body : ${JSON.stringify(jsonBody)}`);
         try {
+            const profiler = logger.startTimer();
             const response = await fetch(url, {
                 method,
                 headers: {
@@ -93,18 +94,16 @@ class BaseApi {
                 },
                 body: JSON.stringify(jsonBody)
             });//.then((data) => data.json());
+            profiler.done({message: `Request to ${url} processed`})
             const responseData = await response.json();
-            if (this.debug) {
-                this.log(`URL: ${url}`);
-            }
-            if (!response.status == 200) {
-                
-                //console.log(responseData);
+            
+            if (response.status !== 200) {
                 
                 throw new Error(`HTTP error! status: ${response.status} | ${response.msg} | ${response.errors}`);
             }
             callback(null, responseData);
         }catch(error){
+            logger.error(`PUT request failed: ${error.message}`);
             callback(error);
         }
 
