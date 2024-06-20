@@ -1,9 +1,8 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { ApiService } from '../src/apis/ApiService.js';
-import BaseApi from '../src/core/baseApi.js';
-import { endpoints } from '../src/config/apiConfig.js';
-import base64 from 'base-64';
+import { ApiService } from '../mieapi/src/apis/ApiService.js';
+import BaseApi from '../mieapi/src/core/baseApi.js';
+import { endpoints } from '../mieapi/src/config/apiConfig.js';
 
 describe('ApiService', () => {
     let apiService;

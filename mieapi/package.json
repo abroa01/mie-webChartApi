@@ -1,15 +1,15 @@
 {
   "name": "mieapi",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.3",
+  "description": "A npm package to simplify API interactions with WebChart Electronich Health records",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["api", "service", "http" ],
+  "author": "Anshul Abrol",
+  "license": "MIE",
   "dependencies": {
     "@logtail/node": "^0.4.21",
     "@logtail/winston": "^0.4.21",

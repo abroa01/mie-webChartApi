@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import fetch from 'node-fetch';
 import base64 from 'base-64';
-import BaseApi from '../src/core/baseApi.js';
-import { BASE_URL, USERNAME, PASSWORD } from '../src/config/apiConfig.js';
+import BaseApi from '../mieapi/src/core/baseApi.js';
+import { BASE_URL, USERNAME, PASSWORD } from '../mieapi/src/config/apiConfig.js';
 
 global.fetch = fetch;
 

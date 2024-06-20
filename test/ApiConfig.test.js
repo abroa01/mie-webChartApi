@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { BASE_URL, USERNAME, PASSWORD, endpoints } from '../src/config/apiConfig.js';
-import BaseApi from '../src/core/baseApi.js';
+import { BASE_URL, USERNAME, PASSWORD, endpoints } from '../mieapi/src/config/apiConfig.js';
+import BaseApi from '../mieapi/src/core/baseApi.js';
 
 const baseApi = new BaseApi();
 

@@ -124,7 +124,7 @@ apiService.putApi('exampleApi', { key: 'value' }, (error, response) => {
 
 ### initializeSession
 
-Initializes a session by logging in and storing the session cookie.
+Initializes a session by logging in and storing the session cookie. Replace {sessionId} field in line 'cookie': `wc_miehr_${this.sessionId}_session_id=${this.cookie}` with your sessionId to initialize cookie.
 
 ```javascript
 async initializeSession()
@@ -134,6 +134,11 @@ async initializeSession()
   ```javascript
   await apiService.initializeSession();
   ```
+  - **Example:**
+  ```javascript
+  'cookie': `wc_miehr_anshulmie_session_id=${this.cookie}`
+  ```
+
 
 
 ### Logging

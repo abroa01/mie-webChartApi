@@ -7,6 +7,7 @@ class BaseApi {
         this.baseUrl = BASE_URL;
         this.cookie = null;
         this.debug = false;
+        this.sessionId = null;
     }
 
     async initializeSession() {
@@ -55,7 +56,7 @@ class BaseApi {
                 method,
                 headers: {
                     'Content-Type':'application/json',
-                    'cookie': `wc_miehr_anshulmie_session_id=${this.cookie}`
+                    'cookie': `wc_miehr_${this.sessionId}_session_id=${this.cookie}`
                 }
             });
 
