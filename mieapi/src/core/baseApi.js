@@ -1,23 +1,29 @@
 import base64 from 'base-64';
-import { BASE_URL, USERNAME, PASSWORD } from '../config/apiConfig.js';
+//import { BASE_URL, USERNAME, PASSWORD } from '../config/apiConfig.js';
 import logger from '../logging/logger.js';
 
 class BaseApi {
     constructor() {
-        this.baseUrl = BASE_URL;
+        this.baseUrl = null;
         this.cookie = null;
         this.debug = false;
         this.sessionId = null;
     }
 
-    async initializeSession() {
+    async initializeSession(userHandle, username, password) {
         logger.info('Initializing session');
         try {
+            console.log(userHandle);
+            const url = `https://${userHandle}.webchartnow.com/webchart.cgi/json`;
             const loginData = {
-                login_user: USERNAME,
-                login_passwd: PASSWORD
+                login_user: username,
+                login_passwd: password
             };
+            console.log(loginData);
             const data = new URLSearchParams(loginData).toString();
+            console.log(data);
+            this.baseUrl = url;
+            logger.info('base url: ' +this.baseUrl)
             const response = await fetch(this.baseUrl, {
                 method: 'POST',
                 headers: {
@@ -29,6 +35,8 @@ class BaseApi {
             if (setCookieHeader) {
                 this.cookie = setCookieHeader.split(';')[0].split('=')[1];
                 logger.info(`Session initialized successfully with cookie : ${this.cookie}`);
+                console.log(this.cookie);
+                return this.cookie;
             }
         } catch (error) {
             logger.error('Session failed to initialize :', error);
@@ -37,8 +45,9 @@ class BaseApi {
     }
 
 
-    async getRequest(method, endpoint, options, callback) {
-        if (!this.cookie) {
+    async getRequest(sessionCookie, method, endpoint, options, callback) {
+        console.log(sessionCookie);
+        if (!sessionCookie) {
             //console.error('No session cookie available');
             logger.error('No Session Cookie Available');
             callback(new Error('No session cookie available'));
@@ -56,13 +65,14 @@ class BaseApi {
                 method,
                 headers: {
                     'Content-Type':'application/json',
-                    'cookie': `wc_miehr_${this.sessionId}_session_id=${this.cookie}`
-                }
+                    //'Authorization': `Bearer ${sessionCookie}`
+                    'cookie': `wc_miehr_anshulmie_session_id=${sessionCookie}`
+                },
+                
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+                throw new Error(`HTTP error! status: ${response.status}`);            }
             profiler.done({message: `Request to ${url} processed`})
             const responseData = await response.json();
             
@@ -73,8 +83,8 @@ class BaseApi {
         }
     }
 
-    async putRequest(method ,json, endpoint, callback) {
-        if(!this.cookie){
+    async putRequest(sessionCookie, method ,json, endpoint, callback) {
+        if(!sessionCookie){
             logger.error('No Session Cookie Available');
             //console.error('No Session Cookie Available');
             callback(new Error('No Session Cookie Available'));
@@ -91,8 +101,9 @@ class BaseApi {
                 method,
                 headers: {
                     'Content-Type':'application/json',
-                    'cookie': `wc_miehr_anshulmie_session_id=${this.cookie}`  
+                    
                 },
+                Authorization: `Bearer ${sessionCookie}`,
                 body: JSON.stringify(jsonBody)
             });//.then((data) => data.json());
             profiler.done({message: `Request to ${url} processed`})
