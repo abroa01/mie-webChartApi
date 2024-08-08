@@ -7,7 +7,11 @@
   "scripts": {
     "test": "mocha"
   },
-  "keywords": ["api", "service", "http" ],
+  "keywords": [
+    "api",
+    "service",
+    "http"
+  ],
   "author": "Anshul Abrol",
   "license": "MIE",
   "dependencies": {

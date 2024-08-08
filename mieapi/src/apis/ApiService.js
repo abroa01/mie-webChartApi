@@ -8,7 +8,7 @@ export class ApiService extends BaseApi {
         super();
     }
 
-    async getApi(sessionCookie, apiName, options, callback) {
+    async getApi(sessionCookie, apiName, options, userHandle, callback) {
         try {
             logger.info(`getApi called with apiName: ${apiName}`);
             if (!sessionCookie) {
@@ -21,7 +21,7 @@ export class ApiService extends BaseApi {
                 throw new Error (`API endpoint for ${apiName} not found.`);
             }
             //const endpoint = `${}`
-            this.getRequest(sessionCookie,'GET', endpoint, options, callback);
+            this.getRequest(sessionCookie,'GET', endpoint, options,userHandle, callback);
         } catch (error) {
             logger.error('Error fetching Api:', error);
             //console.error('Error fetching Api:', error);
@@ -31,7 +31,7 @@ export class ApiService extends BaseApi {
         }
     }
 
-    async putApi(sessionCookie, apiName, json, callback) {
+    async putApi(sessionCookie, apiName, json, userHandle, callback) {
         try{
             logger.info(`putApi called with apiName: ${apiName}`);
             if(!sessionCookie) {
@@ -42,7 +42,7 @@ export class ApiService extends BaseApi {
                 throw new Error (`API endpoint for ${apiName} not found.`);
             }
             //const endpoint = 'PUT/db/abbreviations';
-            this.putRequest(sessionCookie, 'PUT', json, endpoint, callback)
+            this.putRequest(sessionCookie, 'PUT', json, endpoint,userHandle,  callback)
         } catch (error) {
             logger.error('Error fetching Api:', error);
             //console.error('Error fetching Api:', error);
