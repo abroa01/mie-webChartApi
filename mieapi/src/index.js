@@ -1,11 +1,19 @@
-import apiNames from './config/apiConfig.js';
-import api from './apis/index.js';
-import logger from './logging/logger.js'
+import { ApiService } from '../src/apis/ApiService'
+import { endpoints } from '../src/config/apiConfig';
+import logger from '../src/logging/logger';
 
-const { ApiService } = api;
-
+//single instance of ApiService
 const apiService = new ApiService();
 
+export {
+  apiService,
+  endpoints,
+  logger
+};
+
+// export for backwards compatibility
 export default {
-    apiService
+  apiService,
+  endpoints,
+  logger
 };
