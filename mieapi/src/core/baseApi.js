@@ -156,8 +156,7 @@ class BaseApi {
             const setCookieHeader = response.headers.get('set-cookie');
             if (!setCookieHeader) {
                 throw new Error('No set-cookie header found');
-            }
-
+            } 
             const cookie = setCookieHeader.split(';')[0].split('=')[1];
             return { success: true, cookie };
         } catch (error) {
@@ -171,7 +170,6 @@ class BaseApi {
         const url = `${appendedUrl}/${encodedEndpoint}`;
         
         logger.info(`Making GET request to: ${url}`);
-        const profiler = logger.startTimer();
 
         try {
             const response = await fetch(url, {
@@ -186,7 +184,7 @@ class BaseApi {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            profiler.done({ message: `Request to ${url} processed` });
+            logger.info({ message: `Request to ${url} processed` });
             return await response.json();
         } catch (error) {
             logger.error(`GET request failed: ${error.message}`);
@@ -194,13 +192,13 @@ class BaseApi {
         }
     }
 
-    async putRequest(sessionCookie, method, json, endpoint, userHandle) {
+    async putRequest(sessionCookie, method, json, endpoint, userHandle, appendedUrl) {
         const encodedEndpoint = base64.encode(`${method}/${endpoint}`);
-        const url = `${this.baseUrl}/${encodedEndpoint}`;
+        const url = `${appendedUrl}/${encodedEndpoint}`;
         const jsonBody = Array.isArray(json) ? json : [json];
 
         logger.info(`Making PUT request to: ${url}`);
-        const profiler = logger.startTimer();
+     
 
         try {
             const response = await fetch(url, {
@@ -212,7 +210,7 @@ class BaseApi {
                 body: JSON.stringify(jsonBody)
             });
 
-            profiler.done({ message: `Request to ${url} processed` });
+            logger.info({ message: `Request to ${url} processed` });
             const responseData = await response.json();
 
             if (!response.ok) {

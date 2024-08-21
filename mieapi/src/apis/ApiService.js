@@ -98,9 +98,10 @@ export class ApiService extends BaseApi {
         }
         
         const endpoint = this.getEndpoint(apiName);
+        const url = `https://${userHandle}.webchartnow.com/webchart.cgi/json`;
         
         try {
-            return await this.putRequest(sessionCookie, 'PUT', json, endpoint, userHandle);
+            return await this.putRequest(sessionCookie, 'PUT', json, endpoint, userHandle, url);
         } catch (error) {
             logger.error('Error in putApi:', error);
             throw error; 

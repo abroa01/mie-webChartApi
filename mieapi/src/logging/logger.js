@@ -1,33 +1,28 @@
-// logging/logger.js
 import { createLogger, format, transports } from 'winston';
-import { Logtail } from '@logtail/node';
-import { LogtailTransport } from '@logtail/winston';
-const { combine, timestamp, printf, errors, colorize } = format;
 
-//process.env should hold this value for future 
-const sourceToken = 'LhCY5EnVsPfeJHHqMyA7wev5'
-const logtail = new Logtail(sourceToken);
+const { combine, timestamp, printf, errors, colorize, metadata } = format;
 
-
-const myFormat = printf(({ level, message, timestamp, stack }) => {
-  return `${timestamp} ${level}: ${stack || message}`;
+const myFormat = printf(({ level, message, timestamp, ...metadata }) => {
+  let log = `${timestamp} ${level}: ${message}`;
+  if (Object.keys(metadata).length > 0) {
+    log += ` ${JSON.stringify(metadata)}`;
+  }
+  return log;
 });
 
 const logger = createLogger({
-  level: 'info',
+  level: process.env.LOG_LEVEL || 'debug',
   format: combine(
     colorize(),
     timestamp({
-        format: 'YYYY-MM-DD hh:mm:ss.SSS A', 
-      })
-      ,
+      format: 'YYYY-MM-DD HH:mm:ss.SSS',
+    }),
     errors({ stack: true }),
+    metadata({ fillExcept: ['message', 'level', 'timestamp'] }),
     myFormat
   ),
   transports: [
-    new transports.Console(),
-    new LogtailTransport(logtail)
-    //new transports.File({ filename: 'combined.log' })
+    new transports.Console()
   ],
 });
 
