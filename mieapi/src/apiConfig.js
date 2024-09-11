@@ -1,7 +1,3 @@
-
-import dotenv from 'dotenv';
-dotenv.config();
-
 export function getApiConfig(key) {
   const config = {
     API_URL: process.env.API_URL, 

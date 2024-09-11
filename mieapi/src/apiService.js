@@ -27,7 +27,7 @@ class apiService {
       }
 
       this.cookie = response.headers.get('set-cookie'); // Store session cookie
-      logger.info('Session initialized successfully');
+      logger.info(`Session initialized successfully with value : ${this.cookie}` );
     } catch (error) {
       logger.error(`Failed to initialize session: ${error.message}`);
       throw error;
