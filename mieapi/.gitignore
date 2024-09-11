@@ -31,3 +31,8 @@ coverage/
 dist/
 build/
 .lock-wscript
+
+
+#gitignore and npmigore files
+.gitignore
+.npmignore

@@ -21,3 +21,7 @@ build/
 .git/
 .gitignore
 npm-debug.log
+
+
+#gitignore and npmigore files
+.npmignore
