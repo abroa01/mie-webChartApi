@@ -1,2 +1,23 @@
+# Ignore node modules and test files
 node_modules/
-package-lock.json
+test/
+tests/
+spec/
+
+# Ignore local configuration files
+.env
+*.log
+
+# Ignore build files
+dist/
+build/
+
+# Ignore development tools and configs
+.idea/
+.vscode/
+.DS_Store
+
+# Ignore git files and unnecessary package files
+.git/
+.gitignore
+npm-debug.log
