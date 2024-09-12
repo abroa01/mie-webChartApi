@@ -1,6 +1,3 @@
-Here is an updated version of your `README.md` file based on the code structure from the uploaded files:
-
----
 
 # mieapi
 
